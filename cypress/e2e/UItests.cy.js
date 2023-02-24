@@ -1,3 +1,4 @@
+const { bookRoom } = require("../support/page_objects/bookRoom")
 const { onMainPage } = require("../support/page_objects/mainPage")
 
 describe('Contact Us', () => {
@@ -15,6 +16,13 @@ beforeEach('Open website', () => {
     it('Email field was not filled up', () => {
         onMainPage.fillUpContactUsForm('Herules', null, '12345678901','Subject','Text Message Text Message')
         onMainPage.validationMessegeEmptyField('Email')
+    })
+    it('Email field was not valid', () => {
+        const invalidEmail = ['@example.com', 'HerculesPoirot', 'Hercules.Poirotexample.com', 'Hercules.Poirot@', 'Hercules..Poirot.com', 'Hercules@Poirot@111.222.333.44444']
+        cy.wrap(invalidEmail).each(invalidEmail => {
+        onMainPage.fillUpContactUsForm('Herules', invalidEmail, '12345678901','Subject','Text Message Text Message')
+        onMainPage.validationMessege('Email')
+        })
     })
     it('Phone field was not filled up', () => {
         onMainPage.fillUpContactUsForm('Hercules', 'example@email.com', null,'Subject','Text Message Text Message')
@@ -53,4 +61,13 @@ beforeEach('Open website', () => {
         onMainPage.validationMessege('Message')
     })
     
+})
+describe('Contact Us', () => {
+    beforeEach('Open website', () => {
+        cy.visit('/')
+    })
+    it.only('Happy Path', () => {
+        bookRoom.dispalyBookRoomContainer()
+        bookRoom.calendar()
+        })
 })
